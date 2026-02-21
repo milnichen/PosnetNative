@@ -5,3 +5,5 @@ EXPORTS
     GetClassObject
     DestroyObject
     SetPlatformCapabilities
+    GetAttachType
+

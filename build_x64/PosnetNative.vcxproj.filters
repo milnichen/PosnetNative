@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\1C\PosnetNative\src\AddInNative.cpp">
+    <ClCompile Include="D:\PosnetNative Project\PosnetNative\src\AddInNative.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\1C\PosnetNative\src\PosnetPrinter.cpp">
+    <ClCompile Include="D:\PosnetNative Project\PosnetNative\src\PosnetPrinter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\1C\PosnetNative\src\posnet_protocol.cpp">
+    <ClCompile Include="D:\PosnetNative Project\PosnetNative\src\posnet_protocol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\1C\PosnetNative\src\posnet_crc.cpp">
+    <ClCompile Include="D:\PosnetNative Project\PosnetNative\src\posnet_crc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\1C\PosnetNative\CMakeLists.txt" />
+    <CustomBuild Include="D:\PosnetNative Project\PosnetNative\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{084FD759-5B97-3CA2-B315-A2213E132A28}</UniqueIdentifier>
+      <UniqueIdentifier>{3E37107A-D4DC-3179-96BB-C0E02A0528C9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

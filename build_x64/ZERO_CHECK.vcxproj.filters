@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\1C\PosnetNative\build_x64\CMakeFiles\bd75f78e18e3f8a222cb81cf139a9538\generate.stamp.rule">
+    <CustomBuild Include="D:\PosnetNative Project\PosnetNative\build_x64\CMakeFiles\e32af54631d24ab8761d86f3d6cbf9ba\generate.stamp.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{03E98AB7-83EB-3E61-964F-E0DFC9110737}</UniqueIdentifier>
+      <UniqueIdentifier>{315BAF59-AF9D-3416-914A-4F240E2236D2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

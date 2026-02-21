@@ -1,3 +1,3 @@
-C:/1C/PosnetNative/build_x86/CMakeFiles/PosnetNative.dir
-C:/1C/PosnetNative/build_x86/CMakeFiles/ALL_BUILD.dir
-C:/1C/PosnetNative/build_x86/CMakeFiles/ZERO_CHECK.dir
+D:/PosnetNative Project/PosnetNative/build_x86/CMakeFiles/PosnetNative.dir
+D:/PosnetNative Project/PosnetNative/build_x86/CMakeFiles/ALL_BUILD.dir
+D:/PosnetNative Project/PosnetNative/build_x86/CMakeFiles/ZERO_CHECK.dir

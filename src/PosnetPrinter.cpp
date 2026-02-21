@@ -6,60 +6,59 @@
 
 #ifdef _WIN32
   #include <windows.h>
+  #include <objbase.h>  // for CoTaskMemAlloc
   static std::wstring WideFromCp1250(const std::string& s);
   static std::string Cp1250FromWide(const std::wstring& wide);
 #endif
 
 PosnetPrinter::PosnetPrinter()
     : m_pConnection(NULL)
-    , m_pMemManager(NULL)
+    , m_iMemory(NULL)
 {}
 
 PosnetPrinter::~PosnetPrinter() {}
 
-// Вызов AllocMemory менеджера памяти. Платформа 1С передаёт объект с vtable (C++): первый указатель — таблица методов.
-void* PosnetPrinter::AllocMemoryViaManager(unsigned long size) {
-    if (!m_pMemManager || size == 0) return NULL;
-    
-    // Приводим void* к интерфейсу IMemoryManager
-    IMemoryManager* pMM = static_cast<IMemoryManager*>(m_pMemManager);
-    void* pRes = nullptr;
-    
-    // Вызываем через штатный метод интерфейса
-    if (pMM->AllocMemory(&pRes, size)) {
-        return pRes;
-    }
-    return nullptr;
-}
-
-bool PosnetPrinter::Init(void* pConnection) {
+bool ADDIN_API PosnetPrinter::Init(void* pConnection) {
+    OutputDebugStringW(L"[PosnetPrinter] Init() called\n");
     m_pConnection = pConnection;
     return true;
 }
 
-bool PosnetPrinter::setMemManager(void* pMemManager) {
-    m_pMemManager = pMemManager;
+bool ADDIN_API PosnetPrinter::setMemManager(void* pMemManager) {
+    OutputDebugStringW(L"[PosnetPrinter] setMemManager() called\n");
+    m_iMemory = reinterpret_cast<IMemoryManager*>(pMemManager);
     return true;
 }
 
-long PosnetPrinter::GetInfo() {
-    return 100; // версия 1.0.0 -> 100
+long ADDIN_API PosnetPrinter::GetInfo() {
+    OutputDebugStringW(L"[PosnetPrinter] GetInfo() called\n");
+    return 2000; // interface v2
 }
 
-void PosnetPrinter::Done() {
+void ADDIN_API PosnetPrinter::Done() {
+    OutputDebugStringW(L"[PosnetPrinter] Done() called\n");
     m_pConnection = NULL;
-    m_pMemManager = NULL;
+    m_iMemory = NULL;
 }
 
-bool PosnetPrinter::RegisterExtensionAs(WCHAR_T** wsExtName) {
+bool ADDIN_API PosnetPrinter::RegisterExtensionAs(WCHAR_T** wsExtName) {
+    OutputDebugStringW(L"[PosnetPrinter] RegisterExtensionAs() called\n");
     if (!wsExtName) return false;
     *wsExtName = NULL;
-    size_t len = (wcslen(EXTENSION_NAME) + 1) * sizeof(WCHAR_T);
-    if (len > 0x7FFFFFFFu) return false;
-    WCHAR_T* p = (WCHAR_T*)AllocMemoryViaManager((unsigned long)len);
-    if (!p) return false;
+
+    if (!m_iMemory) {
+        OutputDebugStringW(L"[PosnetPrinter] Error: MemoryManager is NULL in RegisterExtensionAs\n");
+        return false;
+    }
+
+    const size_t cch = wcslen(EXTENSION_NAME);
+    const unsigned long cb = (unsigned long)((cch + 1) * sizeof(WCHAR_T));
+    WCHAR_T* p = NULL;
+
+    if (!m_iMemory->AllocMemory((void**)&p, cb) || !p) return false;
+
 #ifdef _WIN32
-    wcscpy_s(p, wcslen(EXTENSION_NAME) + 1, EXTENSION_NAME);
+    wcscpy_s(p, cch + 1, EXTENSION_NAME);
 #else
     wcscpy(p, EXTENSION_NAME);
 #endif
@@ -67,17 +66,17 @@ bool PosnetPrinter::RegisterExtensionAs(WCHAR_T** wsExtName) {
     return true;
 }
 
-long PosnetPrinter::GetNProps() { return 0; }
-long PosnetPrinter::FindProp(const WCHAR_T*) { return -1; }
-const WCHAR_T* PosnetPrinter::GetPropName(long, long) { return NULL; }
-bool PosnetPrinter::GetPropVal(long, tVariant*) { return false; }
-bool PosnetPrinter::SetPropVal(long, tVariant*) { return false; }
-bool PosnetPrinter::IsPropReadable(long) { return false; }
-bool PosnetPrinter::IsPropWritable(long) { return false; }
+long ADDIN_API PosnetPrinter::GetNProps() { return 0; }
+long ADDIN_API PosnetPrinter::FindProp(const WCHAR_T*) { return -1; }
+const WCHAR_T* ADDIN_API PosnetPrinter::GetPropName(long, long) { return NULL; }
+bool ADDIN_API PosnetPrinter::GetPropVal(const long, tVariant*) { return false; }
+bool ADDIN_API PosnetPrinter::SetPropVal(const long, tVariant*) { return false; }
+bool ADDIN_API PosnetPrinter::IsPropReadable(const long) { return false; }
+bool ADDIN_API PosnetPrinter::IsPropWritable(const long) { return false; }
 
-long PosnetPrinter::GetNMethods() { return 1; }
+long ADDIN_API PosnetPrinter::GetNMethods() { return 1; }
 
-long PosnetPrinter::FindMethod(const WCHAR_T* wsMethodName) {
+long ADDIN_API PosnetPrinter::FindMethod(const WCHAR_T* wsMethodName) {
     if (!wsMethodName) return -1;
 #ifdef _WIN32
     if (_wcsicmp(wsMethodName, SENDCOMMAND_NAME) == 0)
@@ -88,63 +87,63 @@ long PosnetPrinter::FindMethod(const WCHAR_T* wsMethodName) {
     return -1;
 }
 
-const WCHAR_T* PosnetPrinter::GetMethodName(long lMethodNum, long lMethodAlias) {
+const WCHAR_T* ADDIN_API PosnetPrinter::GetMethodName(const long lMethodNum, const long lMethodAlias) {
     (void)lMethodAlias;
     if (lMethodNum != METHOD_SEND_COMMAND) return NULL;
-    return AllocCopyWstring(SENDCOMMAND_NAME);
+    
+    uint32_t len = 0;
+    return AllocCopyWstring(SENDCOMMAND_NAME, &len);
 }
 
-long PosnetPrinter::GetNParams(long lMethodNum) {
+long ADDIN_API PosnetPrinter::GetNParams(const long lMethodNum) {
     if (lMethodNum != METHOD_SEND_COMMAND) return 0;
     return SENDCOMMAND_PARAMS;
 }
 
-bool PosnetPrinter::GetParamDefValue(long lMethodNum, long lParamNum, tVariant* pvarParamDefValue) {
+bool ADDIN_API PosnetPrinter::GetParamDefValue(const long lMethodNum, const long lParamNum, tVariant* pvarParamDefValue) {
     if (!pvarParamDefValue || lMethodNum != METHOD_SEND_COMMAND) return false;
-    pvarParamDefValue->vt = VTYPE_EMPTY;
+    (void)lParamNum;
+    tVarInit(pvarParamDefValue);
     return true;
 }
 
-bool PosnetPrinter::HasRetVal(long lMethodNum) {
+bool ADDIN_API PosnetPrinter::HasRetVal(const long lMethodNum) {
     return (lMethodNum == METHOD_SEND_COMMAND);
 }
 
-bool PosnetPrinter::CallAsProc(long lMethodNum, tVariant* paParams, long lSizeArray) {
+bool ADDIN_API PosnetPrinter::CallAsProc(const long lMethodNum, tVariant* paParams, const long lSizeArray) {
     (void)lMethodNum;
     (void)paParams;
     (void)lSizeArray;
     return false;
 }
 
-bool PosnetPrinter::CallAsFunc(long lMethodNum, tVariant* pvarRetValue, tVariant* paParams, long lSizeArray) {
+bool ADDIN_API PosnetPrinter::CallAsFunc(const long lMethodNum, tVariant* pvarRetValue, tVariant* paParams, const long lSizeArray) {
     if (lMethodNum != METHOD_SEND_COMMAND || !pvarRetValue) return false;
-    pvarRetValue->vt = VTYPE_EMPTY;
+    tVarInit(pvarRetValue);
 
     if (!paParams || lSizeArray < SENDCOMMAND_PARAMS) {
-        WstringToVariant(L"ERR_PARAM", pvarRetValue);
+        AllocWstringToVariant(L"ERR_PARAM", pvarRetValue);
         return true;
     }
 
     std::wstring ip, command;
     int port = 0;
     VariantToWstring(&paParams[0], ip);
-    if (paParams[1].vt == VTYPE_I4 || paParams[1].vt == VTYPE_I2)
-        port = (int)paParams[1].lVal;
-    else if (paParams[1].vt == VTYPE_PWSTR && paParams[1].pwstrVal)
-        port = (int)_wtoi(paParams[1].pwstrVal);
+    if (TV_VT(&paParams[1]) == VTYPE_I4)
+        port = (int)TV_I4(&paParams[1]);
+    else if (TV_VT(&paParams[1]) == VTYPE_I2)
+        port = (int)TV_I2(&paParams[1]);
+    else if (TV_VT(&paParams[1]) == VTYPE_PWSTR && TV_WSTR(&paParams[1]))
+        port = (int)_wtoi(TV_WSTR(&paParams[1]));
     VariantToWstring(&paParams[2], command);
 
     std::wstring result = SendCommandImpl(ip, port, command);
-    return WstringToVariant(result, pvarRetValue);
+    return AllocWstringToVariant(result, pvarRetValue);
 }
 
-void PosnetPrinter::SetLocale(const WCHAR_T* locale) {
+void ADDIN_API PosnetPrinter::SetLocale(const WCHAR_T* locale) {
     m_locale = locale ? locale : L"";
-}
-
-bool PosnetPrinter::IsModeSet(unsigned long mode) {
-    (void)mode;
-    return false;
 }
 
 std::wstring PosnetPrinter::SendCommandImpl(const std::wstring& ip, int port, const std::wstring& command) {
@@ -169,39 +168,60 @@ std::wstring PosnetPrinter::SendCommandImpl(const std::wstring& ip, int port, co
 void PosnetPrinter::VariantToWstring(const tVariant* v, std::wstring& out) {
     out.clear();
     if (!v) return;
-    if (v->vt == VTYPE_PWSTR && v->pwstrVal) {
-        const WCHAR_T* p = v->pwstrVal;
-        while (*p) { out += (wchar_t)*p; ++p; }
-    } else if (v->vt == VTYPE_I4 || v->vt == VTYPE_I2) {
+    if (TV_VT(v) == VTYPE_PWSTR && TV_WSTR(v)) {
+        const WCHAR_T* p = TV_WSTR(v);
+        const uint32_t n = v->wstrLen;
+        if (n > 0) {
+            out.assign(p, p + n);
+        } else {
+            out.assign(p);
+        }
+    } else if (TV_VT(v) == VTYPE_I4) {
         wchar_t buf[32];
-        swprintf(buf, 32, L"%ld", (long)v->lVal);
+        swprintf(buf, 32, L"%ld", (long)TV_I4(v));
+        out = buf;
+    } else if (TV_VT(v) == VTYPE_I2) {
+        wchar_t buf[32];
+        swprintf(buf, 32, L"%hd", (short)TV_I2(v));
         out = buf;
     }
 }
 
 bool PosnetPrinter::WstringToVariant(const std::wstring& s, tVariant* v) {
     if (!v) return false;
-    v->vt = VTYPE_PWSTR;
-    if (s.empty()) {
-        v->pwstrVal = (WCHAR_T*)L"";
-        return true;
-    }
-    WCHAR_T* buf = AllocCopyWstring(s);
+    // Deprecated: kept for compatibility with older code paths
+    return AllocWstringToVariant(s, v);
+}
+
+bool PosnetPrinter::AllocWstringToVariant(const std::wstring& s, tVariant* v) {
+    if (!v) return false;
+    tVarInit(v);
+    TV_VT(v) = VTYPE_PWSTR;
+
+    uint32_t wlen = 0;
+    WCHAR_T* buf = AllocCopyWstring(s, &wlen);
     if (!buf) {
-        v->pwstrVal = (WCHAR_T*)L"";
+        // If allocation fails, return empty string
+        v->pwstrVal = NULL;
+        v->wstrLen = 0;
         return true;
     }
     v->pwstrVal = buf;
+    v->wstrLen = wlen;
     return true;
 }
 
-WCHAR_T* PosnetPrinter::AllocCopyWstring(const std::wstring& s) {
-    size_t len = (s.size() + 1) * sizeof(WCHAR_T);
-    if (len > 0x7FFFFFFFu) return NULL;
-    WCHAR_T* p = (WCHAR_T*)AllocMemoryViaManager((unsigned long)len);
-    if (!p) return NULL;
-    for (size_t i = 0; i < s.size(); i++) p[i] = (WCHAR_T)s[i];
-    p[s.size()] = 0;
+WCHAR_T* PosnetPrinter::AllocCopyWstring(const std::wstring& s, uint32_t* outLen) {
+    if (outLen) *outLen = 0;
+    if (!m_iMemory) return NULL;
+
+    const size_t cch = s.size();
+    const unsigned long cb = (unsigned long)((cch + 1) * sizeof(WCHAR_T));
+    WCHAR_T* p = NULL;
+    if (!m_iMemory->AllocMemory((void**)&p, cb) || !p) return NULL;
+    for (size_t i = 0; i < cch; i++) p[i] = (WCHAR_T)s[i];
+    p[cch] = 0;
+    if (outLen) *outLen = (uint32_t)cch;
     return p;
 }
 

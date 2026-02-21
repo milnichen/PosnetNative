@@ -1,0 +1,45 @@
+# --- Visual Studio ---
+.vs/
+*.user
+*.userosscache
+*.sln.docattachments
+*.suo
+*.cache
+*.opendb
+*.db-shm
+*.db-wal
+
+# --- Результаты компиляции (Artifacts) ---
+Debug/
+Release/
+x64/
+x86/
+
+
+# --- Промежуточные файлы C++ ---
+*.obj
+*.pch
+*.tlog
+*.lastbuildstate
+*.idb
+*.pdb
+*.ilk
+*.res
+*.pch
+*.ipch
+
+# --- Библиотеки и исполняемые файлы (Dll, Exe) ---
+# Мы игнорируем их, так как они собираются из исходников
+*.exe
+*.dll
+*.lib
+*.exp
+
+# --- Логи и временные файлы проекта ---
+*.log
+*.tmp
+
+# --- Специфично для 1С ---
+# Если вы делаете замеры или логируете пакеты протокола Posnet
+/logs/
+*.pnt

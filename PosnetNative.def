@@ -1,6 +1,7 @@
-LIBRARY Posnet_x86
+LIBRARY "Posnet_x86"
 EXPORTS
-    GetClassNames=_GetClassNames@0
-    GetClassObject=_GetClassObject@8
-    DestroyObject=_DestroyObject@4
-    SetPlatformCapabilities=_SetPlatformCapabilities@4
+    GetClassNames
+    GetClassObject
+    DestroyObject
+    SetPlatformCapabilities
+    GetAttachType

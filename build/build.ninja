@@ -104,8 +104,8 @@ build CMakeFiles\PosnetNative.dir\src\posnet_crc.cpp.obj: CXX_COMPILER__PosnetNa
 build Posnet_x64.dll Posnet_x64.lib: CXX_SHARED_LIBRARY_LINKER__PosnetNative_Debug CMakeFiles\PosnetNative.dir\src\AddInNative.cpp.obj CMakeFiles\PosnetNative.dir\src\PosnetPrinter.cpp.obj CMakeFiles\PosnetNative.dir\src\posnet_protocol.cpp.obj CMakeFiles\PosnetNative.dir\src\posnet_crc.cpp.obj
   CONFIG = Debug
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MTd /Zi /Ob0 /Od /RTC1
-  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL
-  LINK_LIBRARIES = ws2_32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL  /DEF:"C:/1C/PosnetNative/Posnet_x64.def"
+  LINK_LIBRARIES = ws2_32.lib  oleaut32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = CMakeFiles\PosnetNative.dir
   POST_BUILD = cd .
   PRE_LINK = cd .

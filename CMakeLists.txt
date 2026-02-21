@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 # Имя вашего проекта
 project(PosnetNative)
 
+option(POSNET_CDECL "Use cdecl for exported entry points on Win32" OFF)
+
 # 1. ВКЛЮЧАЕМ СТАТИЧЕСКУЮ ЛИНКОВКУ (библиотеки MSVC будут внутри DLL)
 # Это заменяет динамическую загрузку vcruntime140.dll и msvcp140.dll
 if(MSVC)
@@ -44,11 +46,24 @@ add_library(PosnetNative SHARED ${SOURCE_FILES})
 if(WIN32)
     # Библиотека ws2_32 нужна для работы с сокетами (TCP), которые используются в posnet_protocol.cpp
     target_link_libraries(PosnetNative PRIVATE ws2_32)
+
+    # oleaut32 for CoTaskMemAlloc on Windows
+    target_link_libraries(PosnetNative PRIVATE oleaut32)
     
-    # Задаем имя выходного файла в зависимости от разрядности для удобства макета
+    # Настройка имен и DEF-файлов для корректного экспорта функций без искажения имен (mangling)
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         set_target_properties(PosnetNative PROPERTIES OUTPUT_NAME "Posnet_x64")
+        set(POSNET_DEF_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Posnet_x64.def")
     else()
         set_target_properties(PosnetNative PROPERTIES OUTPUT_NAME "Posnet_x86")
+        if(POSNET_CDECL)
+            target_compile_definitions(PosnetNative PRIVATE POSNET_CDECL)
+            set(POSNET_DEF_FILE "${CMAKE_CURRENT_SOURCE_DIR}/PosnetNative_cdecl.def")
+        else()
+            set(POSNET_DEF_FILE "${CMAKE_CURRENT_SOURCE_DIR}/PosnetNative.def")
+        endif()
     endif()
+
+    # Принудительно используем DEF-файл для всех архитектур
+    set_property(TARGET PosnetNative APPEND_STRING PROPERTY LINK_FLAGS " /DEF:\"${POSNET_DEF_FILE}\"")
 endif()

@@ -1,6 +1,7 @@
-LIBRARY Posnet_x64
+LIBRARY "Posnet_x64"
 EXPORTS
     GetClassNames
     GetClassObject
     DestroyObject
     SetPlatformCapabilities
+    GetAttachType

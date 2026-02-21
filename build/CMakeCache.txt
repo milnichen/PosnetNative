@@ -204,8 +204,7 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
-//Use cdecl for exported functions (try if platform crashes with
-// stdcall)
+//Use cdecl for exported entry points on Win32
 POSNET_CDECL:BOOL=OFF
 
 //Value Computed by CMake
@@ -215,7 +214,7 @@ PosnetNative_BINARY_DIR:STATIC=C:/1C/PosnetNative/build
 PosnetNative_IS_TOP_LEVEL:STATIC=ON
 
 //Dependencies for the target
-PosnetNative_LIB_DEPENDS:STATIC=general;ws2_32;
+PosnetNative_LIB_DEPENDS:STATIC=general;ws2_32;general;oleaut32;
 
 //Value Computed by CMake
 PosnetNative_SOURCE_DIR:STATIC=C:/1C/PosnetNative
