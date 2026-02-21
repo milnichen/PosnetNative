@@ -1,0 +1,6 @@
+LIBRARY Posnet_x64
+EXPORTS
+    GetClassNames
+    GetClassObject
+    DestroyObject
+    SetPlatformCapabilities

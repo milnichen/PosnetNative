@@ -1,0 +1,7 @@
+; x86: cdecl — имена без декорации (@N)
+LIBRARY Posnet_x86
+EXPORTS
+    GetClassNames
+    GetClassObject
+    DestroyObject
+    SetPlatformCapabilities

@@ -1,0 +1,10 @@
+^C:\1C\POSNETNATIVE\BUILD_X86\CMAKEFILES\2538C01A3B4021075FD39C84E8EBA53A\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/1C/PosnetNative -BC:/1C/PosnetNative/build_x86 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/1C/PosnetNative/build_x86/PosnetNative.slnx
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

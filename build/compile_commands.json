@@ -1,0 +1,26 @@
+[
+{
+  "directory": "C:/1C/PosnetNative/build",
+  "command": "C:\\PROGRA~1\\MIB055~1\\18\\Insiders\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DPosnetNative_EXPORTS -IC:\\1C\\PosnetNative\\include -IC:\\1C\\PosnetNative\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\PosnetNative.dir\\src\\AddInNative.cpp.obj /FdCMakeFiles\\PosnetNative.dir\\ /FS -c C:\\1C\\PosnetNative\\src\\AddInNative.cpp",
+  "file": "C:/1C/PosnetNative/src/AddInNative.cpp",
+  "output": "C:/1C/PosnetNative/build/CMakeFiles/PosnetNative.dir/src/AddInNative.cpp.obj"
+},
+{
+  "directory": "C:/1C/PosnetNative/build",
+  "command": "C:\\PROGRA~1\\MIB055~1\\18\\Insiders\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DPosnetNative_EXPORTS -IC:\\1C\\PosnetNative\\include -IC:\\1C\\PosnetNative\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\PosnetNative.dir\\src\\PosnetPrinter.cpp.obj /FdCMakeFiles\\PosnetNative.dir\\ /FS -c C:\\1C\\PosnetNative\\src\\PosnetPrinter.cpp",
+  "file": "C:/1C/PosnetNative/src/PosnetPrinter.cpp",
+  "output": "C:/1C/PosnetNative/build/CMakeFiles/PosnetNative.dir/src/PosnetPrinter.cpp.obj"
+},
+{
+  "directory": "C:/1C/PosnetNative/build",
+  "command": "C:\\PROGRA~1\\MIB055~1\\18\\Insiders\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DPosnetNative_EXPORTS -IC:\\1C\\PosnetNative\\include -IC:\\1C\\PosnetNative\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\PosnetNative.dir\\src\\posnet_protocol.cpp.obj /FdCMakeFiles\\PosnetNative.dir\\ /FS -c C:\\1C\\PosnetNative\\src\\posnet_protocol.cpp",
+  "file": "C:/1C/PosnetNative/src/posnet_protocol.cpp",
+  "output": "C:/1C/PosnetNative/build/CMakeFiles/PosnetNative.dir/src/posnet_protocol.cpp.obj"
+},
+{
+  "directory": "C:/1C/PosnetNative/build",
+  "command": "C:\\PROGRA~1\\MIB055~1\\18\\Insiders\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DPosnetNative_EXPORTS -IC:\\1C\\PosnetNative\\include -IC:\\1C\\PosnetNative\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\PosnetNative.dir\\src\\posnet_crc.cpp.obj /FdCMakeFiles\\PosnetNative.dir\\ /FS -c C:\\1C\\PosnetNative\\src\\posnet_crc.cpp",
+  "file": "C:/1C/PosnetNative/src/posnet_crc.cpp",
+  "output": "C:/1C/PosnetNative/build/CMakeFiles/PosnetNative.dir/src/posnet_crc.cpp.obj"
+}
+]

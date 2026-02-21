@@ -1,0 +1,7 @@
+# ninja log v6
+11	177	7929520404468323	CMakeFiles/PosnetNative.dir/src/posnet_crc.cpp.obj	97030750e043ee54
+21	1841	7929520404570001	CMakeFiles/PosnetNative.dir/src/posnet_protocol.cpp.obj	2d4ce2a1858e4c21
+43	1531	7929520404792680	CMakeFiles/PosnetNative.dir/src/AddInNative.cpp.obj	3f360e479105fc67
+32	1608	7929520404680123	CMakeFiles/PosnetNative.dir/src/PosnetPrinter.cpp.obj	20fa0dbef43d6020
+1841	2529	7929520429206041	Posnet_x64.dll	8ce600e932b07e8
+1841	2529	7929520429206041	Posnet_x64.lib	8ce600e932b07e8
