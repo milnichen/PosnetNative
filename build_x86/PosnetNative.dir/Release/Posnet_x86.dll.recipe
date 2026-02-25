@@ -2,10 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\PosnetNative Project\PosnetNative\build_x86\Release\ZERO_CHECK</FullPath>
+      <FullPath>C:\1C\PosnetNative\build_x86\Release\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>D:\PosnetNative Project\PosnetNative\build_x86\Release\Posnet_x86.dll</FullPath>
+      <FullPath>C:\1C\PosnetNative\build_x86\Release\Posnet_x86.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

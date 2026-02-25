@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"D:/PosnetNative Project/PosnetNative/build_x64/cmake_install.cmake"
+		"C:/1C/PosnetNative/build_x64/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

@@ -1,6 +1,6 @@
-^D:\POSNETNATIVE PROJECT\POSNETNATIVE\CMAKELISTS.TXT
+^C:\1C\POSNETNATIVE\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SD:/PosnetNative Project/PosnetNative" "-BD:/PosnetNative Project/PosnetNative/build_x64" --check-stamp-file "D:/PosnetNative Project/PosnetNative/build_x64/CMakeFiles/generate.stamp"
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/1C/PosnetNative -BC:/1C/PosnetNative/build_x64 --check-stamp-file C:/1C/PosnetNative/build_x64/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

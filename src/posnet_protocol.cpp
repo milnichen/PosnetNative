@@ -4,6 +4,8 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include <iostream>
+#include <vector>
 
 #if defined(_WIN32) || defined(_WIN64)
   #define WIN32_LEAN_AND_MEAN
@@ -29,20 +31,35 @@ static const unsigned char ETX = 0x03;
 static const unsigned char ACK = 0x06;
 static const unsigned char NAK = 0x15;
 
-// CP1250: команда уже в однобайтовой кодировке; просто добавляем ETX и считаем CRC по байтам
+// Формат кадра: [STX]command[TAB]#CRC16[ETX]
+// command — например "v" или "scomm" (передаётся параметром).
+// CRC16 считается от (command + TAB), результат — 4 символа HEX после решётки.
 std::string BuildFrame(const std::string& command) {
-    std::vector<unsigned char> body(command.begin(), command.end());
-    body.push_back(ETX);
+    std::string body = command;
+    if (body.empty() || body.back() != '\t')
+        body.push_back('\t');
 
-    unsigned short crc = PosnetCrc16_Compute(body.data(), body.size());
-    char crcHex[5];
-    snprintf(crcHex, sizeof(crcHex), "%04X", crc);
+    unsigned short crc = PosnetCrc16_Compute((const unsigned char*)body.data(), body.size());
+    char crcBuf[5];
+#if defined(_WIN32) || defined(_WIN64)
+    sprintf_s(crcBuf, sizeof(crcBuf), "%04X", crc);
+#else
+    snprintf(crcBuf, sizeof(crcBuf), "%04X", crc);
+#endif
 
     std::string frame;
-    frame.reserve(1 + body.size() + 4);
+    frame.reserve(1 + body.size() + 1 + 4 + 1);
     frame.push_back((char)STX);
-    frame.append(body.begin(), body.end());
-    frame.append(crcHex, 4);
+    frame.append(body);
+    frame.push_back('#');
+    frame.append(crcBuf, 4);
+    frame.push_back((char)ETX);
+    
+    std::cout << "DEBUG SEND (No Hash): ";
+    for (unsigned char c : frame) printf("%02X ", c);
+    std::cout << std::endl;
+
+
     return frame;
 }
 
@@ -65,7 +82,7 @@ std::string ParseResponse(const unsigned char* data, size_t length) {
         if (i >= avail || i + 1 + 4 > avail)
             return ""; /* неполный кадр */
 
-        size_t bodyLen = i + 1; // включая ETX
+        size_t bodyLen = i; 
         unsigned short crcReceived;
 #if defined(_WIN32) || defined(_WIN64)
         if (sscanf_s((const char*)(p + bodyLen), "%4hX", &crcReceived) != 1)
@@ -92,7 +109,7 @@ std::string SendTcpCommand(const std::string& ip, int port, const std::string& c
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
         return "ERR_SYSTEM: WSAStartup";
 #endif
-
+    //std::string commandToDevice = "getrealid";
     std::string frame = BuildFrame(command);
     SOCKET s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (s == INVALID_SOCKET) {
